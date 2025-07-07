@@ -1,56 +1,84 @@
-<p align="center">
-<img src="https://i.imgur.com/pU5A58S.png" alt="Microsoft Active Directory Logo"/>
-</p>
+# Azure Lab: Domain Controller and Client VM Setup
 
-<h1>On-premises Active Directory Deployed in the Cloud (Azure)</h1>
-This tutorial outlines the implementation of on-premises Active Directory within Azure Virtual Machines.<br />
+This lab will guide you through the process of setting up a Windows Server 2022 Domain Controller and a Windows 10 Client within Microsoft Azure. These virtual machines will be used for subsequent labs.
 
+---
 
-<h2>Video Demonstration</h2>
+## Step 1: Create Resource Group and Network Infrastructure
 
-- ### [YouTube: How to Deploy on-premises Active Directory within Azure Compute](https://www.youtube.com)
+### Create a Resource Group
+- Use a unique name, e.g., `RG-LabDomain`
+- Select your preferred Azure region
 
-<h2>Environments and Technologies Used</h2>
+### Create a Virtual Network and Subnet
+- Name: `VNET-LabDomain`
+- Subnet: `Subnet-Lab` (e.g., 10.0.0.0/24)
 
-- Microsoft Azure (Virtual Machines/Compute)
-- Remote Desktop
-- Active Directory Domain Services
-- PowerShell
+---
 
-<h2>Operating Systems Used </h2>
+## Step 2: Create Domain Controller VM
 
-- Windows Server 2022
-- Windows 10 (21H2)
+### VM Configuration
+- Name: `DC-1`
+- Image: Windows Server 2022
+- Username: `labuser`
+- Password: `Cyberlab123!`
+- Region: Same as your Resource Group
+- Virtual Network: `VNET-LabDomain`
+- Subnet: `Subnet-Lab`
 
-<h2>High-Level Deployment and Configuration Steps</h2>
+### Post-Creation Configuration
+1. Set Static Private IP
+   - Go to `DC-1`'s Network Interface settings in Azure
+   - Set the Private IP to Static
 
-- Step 1
-- Step 2
-- Step 3
-- Step 4
+2. Log into `DC-1` via RDP
 
-<h2>Deployment and Configuration Steps</h2>
+3. Disable Windows Firewall (for testing only)
+   - Open PowerShell or Command Prompt as Administrator and run:
+     ```powershell
+     netsh advfirewall set allprofiles state off
+     ```
 
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
+---
 
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
+## Step 3: Create Client-1 VM
 
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
+### VM Configuration
+- Name: `Client-1`
+- Image: Windows 10
+- Username: `labuser`
+- Password: `Cyberlab123!`
+- Region: Same as `DC-1`
+- Virtual Network: `VNET-LabDomain`
+- Subnet: `Subnet-Lab`
+
+### Post-Creation Configuration
+1. Set DNS to `DC-1`’s Private IP
+   - Go to `Client-1`'s Network Interface settings in Azure
+   - Set DNS server to `DC-1`’s Static Private IP
+
+2. Restart `Client-1` from the Azure Portal
+
+3. Log into `Client-1` via RDP
+
+4. Test Network Connectivity
+   - Open Command Prompt and run:
+     ```cmd
+     ping <DC-1_Private_IP>
+     ```
+   - Ensure ping replies are successful
+
+5. Verify DNS Configuration
+   - Open PowerShell and run:
+     ```powershell
+     ipconfig /all
+     ```
+   - Confirm the DNS Server entry matches `DC-1`’s private IP address
+
+---
+
+## Lab Completion Notes
+
+- Do not delete the VMs. They will be used in future labs.
+- To save Azure costs, stop the VMs in the Azure Portal when not in use.
