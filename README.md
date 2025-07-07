@@ -7,12 +7,16 @@ This lab will guide you through the process of setting up a Windows Server 2022 
 ## Step 1: Create Resource Group and Network Infrastructure
 
 ### Create a Resource Group
-- Use a unique name, e.g., `RG-LabDomain`
+- Use a unique name, e.g., `Active-Directory-Lab`
 - Select your preferred Azure region
 
 ### Create a Virtual Network and Subnet
 - Name: `VNET-LabDomain`
 - Subnet: `Subnet-Lab` (e.g., 10.0.0.0/24)
+
+
+https://github.com/user-attachments/assets/53c4dfb5-4d58-4919-be58-edeeb9868534
+
 
 ---
 
